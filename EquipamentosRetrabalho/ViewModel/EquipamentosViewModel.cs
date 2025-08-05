@@ -38,7 +38,7 @@ namespace EquipamentosRetrabalho.ViewModel
 
             string query = "SELECT * FROM controle_lotes";
             if (!string.IsNullOrWhiteSpace(filtro))
-                query += " WHERE cliente LIKE @filtro OR ordem_montagem LIKE @filtro OR equipamento LIKE @filtro";
+                query += $" WHERE {FiltroSelecionado} LIKE @filtro"; 
 
             using var cmd = new MySqlCommand(query, conn);
             if (!string.IsNullOrWhiteSpace(filtro))
@@ -64,10 +64,26 @@ namespace EquipamentosRetrabalho.ViewModel
             }
         }
 
+
         public event PropertyChangedEventHandler? PropertyChanged;
         protected void OnPropertyChanged([CallerMemberName] string nome = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nome));
         }
+
+        public List<string> FiltrosDisponiveis { get; } = new() { "cliente", "ordem_montagem" };
+
+        private string _filtroSelecionado = "cliente";
+        public string FiltroSelecionado
+        {
+            get => _filtroSelecionado;
+            set
+            {
+                _filtroSelecionado = value;
+                OnPropertyChanged();
+                CarregarEquipamentos(FiltroPesquisa); 
+            }
+        }
+
     }
 }

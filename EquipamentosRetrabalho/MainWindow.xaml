@@ -11,7 +11,7 @@
         </Grid.RowDefinitions>
 
         <!-- Header -->
-        <Border Grid.Row="0" Background="#1A1A1A" Padding="10">
+        <Border Grid.Row="0" Background="#000714" Padding="10">
             <DockPanel VerticalAlignment="Center">
                 <Image Source="Imagens/logoSEW.png" Width="80" DockPanel.Dock="Left" Margin="0,0,10,0"/>
                 <TextBlock Text="Controle de Equipamentos"
@@ -30,7 +30,7 @@
             </Grid.ColumnDefinitions>
 
             <!-- Menu lateral -->
-            <StackPanel Background="#1A1A1A" Grid.Column="0" Grid.ColumnSpan="2">
+            <StackPanel Background="#000714" Grid.Column="0" Grid.ColumnSpan="2">
                 <Button Background="#A1020F"  FontWeight="ExtraBold" FontSize="15" Content="Equipamentos" Margin="10" Height="40" Click="AbrirEquipamentos_Click"/>
                 <Button Background="#A1020F"  FontWeight="ExtraBold" FontSize="15" Content="Estatísticas" Margin="10" Height="40" Click="AbrirEstatisticas_Click"/>
             </StackPanel>

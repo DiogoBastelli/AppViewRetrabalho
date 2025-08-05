@@ -14,10 +14,18 @@
         </Grid.RowDefinitions>
 
         <!-- Campo de pesquisa -->
-        <StackPanel Orientation="Horizontal" Margin="0,0,0,10" Grid.Row="0">
-            <TextBlock Text="Pesquisar: " Width="82" VerticalAlignment="Center"/>
-            <TextBox Width="342" Text="{Binding FiltroPesquisa, UpdateSourceTrigger=PropertyChanged}" />
+        <StackPanel Orientation="Horizontal" Margin="10">
+            <TextBlock Text="Pesquisar por:" VerticalAlignment="Center" Margin="0,0,10,0"/>
+
+            <ComboBox Width="150"
+              ItemsSource="{Binding FiltrosDisponiveis}"
+              SelectedItem="{Binding FiltroSelecionado}"
+              Margin="0,0,10,0"/>
+
+            <TextBox Width="200"
+             Text="{Binding FiltroPesquisa, UpdateSourceTrigger=PropertyChanged}" />
         </StackPanel>
+
 
         <!-- Tabela de equipamentos -->
         <DataGrid Grid.Row="1"
