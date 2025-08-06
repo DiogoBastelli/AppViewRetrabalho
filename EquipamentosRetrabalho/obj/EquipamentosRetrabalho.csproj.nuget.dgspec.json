@@ -50,9 +50,25 @@
         "net8.0-windows7.0": {
           "targetAlias": "net8.0-windows",
           "dependencies": {
+            "LiveChartsCore": {
+              "target": "Package",
+              "version": "[2.0.0-beta.500, )"
+            },
+            "LiveChartsCore.SkiaSharpView.WPF": {
+              "target": "Package",
+              "version": "[2.0.0-beta.500, )"
+            },
             "MySql.Data": {
               "target": "Package",
               "version": "[9.4.0, )"
+            },
+            "SkiaSharp": {
+              "target": "Package",
+              "version": "[2.88.3, )"
+            },
+            "SkiaSharp.Views.WPF": {
+              "target": "Package",
+              "version": "[2.88.3, )"
             }
           },
           "imports": [

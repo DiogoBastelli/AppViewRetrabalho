@@ -1,21 +1,35 @@
 {
   "version": 2,
-  "dgSpecHash": "OUbCVPO8EMA=",
+  "dgSpecHash": "zB1mzLCwPXA=",
   "success": true,
   "projectFilePath": "C:\\Users\\diogo\\source\\repos\\EquipamentosRetrabalho\\EquipamentosRetrabalho\\EquipamentosRetrabalho.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\diogo\\.nuget\\packages\\bouncycastle.cryptography\\2.5.1\\bouncycastle.cryptography.2.5.1.nupkg.sha512",
     "C:\\Users\\diogo\\.nuget\\packages\\google.protobuf\\3.30.0\\google.protobuf.3.30.0.nupkg.sha512",
+    "C:\\Users\\diogo\\.nuget\\packages\\harfbuzzsharp\\2.8.2.3\\harfbuzzsharp.2.8.2.3.nupkg.sha512",
+    "C:\\Users\\diogo\\.nuget\\packages\\harfbuzzsharp.nativeassets.macos\\2.8.2.3\\harfbuzzsharp.nativeassets.macos.2.8.2.3.nupkg.sha512",
+    "C:\\Users\\diogo\\.nuget\\packages\\harfbuzzsharp.nativeassets.win32\\2.8.2.3\\harfbuzzsharp.nativeassets.win32.2.8.2.3.nupkg.sha512",
     "C:\\Users\\diogo\\.nuget\\packages\\k4os.compression.lz4\\1.3.8\\k4os.compression.lz4.1.3.8.nupkg.sha512",
     "C:\\Users\\diogo\\.nuget\\packages\\k4os.compression.lz4.streams\\1.3.8\\k4os.compression.lz4.streams.1.3.8.nupkg.sha512",
     "C:\\Users\\diogo\\.nuget\\packages\\k4os.hash.xxhash\\1.0.8\\k4os.hash.xxhash.1.0.8.nupkg.sha512",
-    "C:\\Users\\diogo\\.nuget\\packages\\microsoft.netcore.platforms\\1.1.0\\microsoft.netcore.platforms.1.1.0.nupkg.sha512",
+    "C:\\Users\\diogo\\.nuget\\packages\\livechartscore\\2.0.0-beta.500\\livechartscore.2.0.0-beta.500.nupkg.sha512",
+    "C:\\Users\\diogo\\.nuget\\packages\\livechartscore.skiasharpview\\2.0.0-beta.500\\livechartscore.skiasharpview.2.0.0-beta.500.nupkg.sha512",
+    "C:\\Users\\diogo\\.nuget\\packages\\livechartscore.skiasharpview.wpf\\2.0.0-beta.500\\livechartscore.skiasharpview.wpf.2.0.0-beta.500.nupkg.sha512",
+    "C:\\Users\\diogo\\.nuget\\packages\\microsoft.netcore.platforms\\2.0.0\\microsoft.netcore.platforms.2.0.0.nupkg.sha512",
     "C:\\Users\\diogo\\.nuget\\packages\\microsoft.netcore.targets\\1.1.0\\microsoft.netcore.targets.1.1.0.nupkg.sha512",
+    "C:\\Users\\diogo\\.nuget\\packages\\microsoft.win32.systemevents\\4.5.0\\microsoft.win32.systemevents.4.5.0.nupkg.sha512",
     "C:\\Users\\diogo\\.nuget\\packages\\mysql.data\\9.4.0\\mysql.data.9.4.0.nupkg.sha512",
+    "C:\\Users\\diogo\\.nuget\\packages\\skiasharp\\2.88.3\\skiasharp.2.88.3.nupkg.sha512",
+    "C:\\Users\\diogo\\.nuget\\packages\\skiasharp.harfbuzz\\2.88.3\\skiasharp.harfbuzz.2.88.3.nupkg.sha512",
+    "C:\\Users\\diogo\\.nuget\\packages\\skiasharp.nativeassets.macos\\2.88.3\\skiasharp.nativeassets.macos.2.88.3.nupkg.sha512",
+    "C:\\Users\\diogo\\.nuget\\packages\\skiasharp.nativeassets.win32\\2.88.3\\skiasharp.nativeassets.win32.2.88.3.nupkg.sha512",
+    "C:\\Users\\diogo\\.nuget\\packages\\skiasharp.views.desktop.common\\2.88.3\\skiasharp.views.desktop.common.2.88.3.nupkg.sha512",
+    "C:\\Users\\diogo\\.nuget\\packages\\skiasharp.views.wpf\\2.88.3\\skiasharp.views.wpf.2.88.3.nupkg.sha512",
     "C:\\Users\\diogo\\.nuget\\packages\\system.buffers\\4.5.1\\system.buffers.4.5.1.nupkg.sha512",
     "C:\\Users\\diogo\\.nuget\\packages\\system.configuration.configurationmanager\\8.0.0\\system.configuration.configurationmanager.8.0.0.nupkg.sha512",
     "C:\\Users\\diogo\\.nuget\\packages\\system.diagnostics.diagnosticsource\\8.0.1\\system.diagnostics.diagnosticsource.8.0.1.nupkg.sha512",
     "C:\\Users\\diogo\\.nuget\\packages\\system.diagnostics.eventlog\\8.0.0\\system.diagnostics.eventlog.8.0.0.nupkg.sha512",
+    "C:\\Users\\diogo\\.nuget\\packages\\system.drawing.common\\4.5.1\\system.drawing.common.4.5.1.nupkg.sha512",
     "C:\\Users\\diogo\\.nuget\\packages\\system.io\\4.3.0\\system.io.4.3.0.nupkg.sha512",
     "C:\\Users\\diogo\\.nuget\\packages\\system.io.pipelines\\9.0.0\\system.io.pipelines.9.0.0.nupkg.sha512",
     "C:\\Users\\diogo\\.nuget\\packages\\system.reflection\\4.3.0\\system.reflection.4.3.0.nupkg.sha512",
@@ -34,5 +48,16 @@
     "C:\\Users\\diogo\\.nuget\\packages\\system.windows.extensions\\8.0.0\\system.windows.extensions.8.0.0.nupkg.sha512",
     "C:\\Users\\diogo\\.nuget\\packages\\zstdsharp.port\\0.8.5\\zstdsharp.port.0.8.5.nupkg.sha512"
   ],
-  "logs": []
+  "logs": [
+    {
+      "code": "NU1903",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "O pacote 'SkiaSharp' 2.88.3 tem uma alta vulnerabilidade de gravidade conhecida, https://github.com/advisories/GHSA-j7hp-h8jx-5ppr",
+      "libraryId": "SkiaSharp",
+      "targetGraphs": [
+        "net8.0-windows7.0"
+      ]
+    }
+  ]
 }

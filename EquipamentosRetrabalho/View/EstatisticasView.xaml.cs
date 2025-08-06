@@ -15,6 +15,7 @@ using System.Windows.Shapes;
 using EquipamentosRetrabalho.ViewModel;
 
 
+
 namespace EquipamentosRetrabalho.View
 {
     public partial class EstatisticasView : UserControl
@@ -22,8 +23,9 @@ namespace EquipamentosRetrabalho.View
         public EstatisticasView()
         {
             InitializeComponent();
-            DataContext = new EstatisticasViewModel();
+            DataContext = new EstatisticasViewModel(); 
         }
     }
 }
+
 
