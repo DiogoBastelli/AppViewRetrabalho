@@ -30,6 +30,6 @@ public partial class MainWindow : Window
 
     private void AbrirEstatisticas_Click(object sender, RoutedEventArgs e)
     {
-        MessageBox.Show("Tela de estatísticas ainda não implementada.");
+        ConteudoPrincipal.Content = new View.EstatisticasView();
     }
 }

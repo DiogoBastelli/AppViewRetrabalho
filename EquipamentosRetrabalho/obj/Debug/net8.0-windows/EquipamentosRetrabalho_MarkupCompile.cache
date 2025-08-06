@@ -10,11 +10,11 @@ none
 false
 TRACE;DEBUG;NET;NET8_0;NETCOREAPP
 C:\Users\diogo\source\repos\EquipamentosRetrabalho\EquipamentosRetrabalho\App.xaml
-2265782675
+31621252510
 
-7-1790678278
+9-1366279850
 206857809556
-MainWindow.xaml;View\EquipamentosView.xaml;
+MainWindow.xaml;View\EquipamentosView.xaml;View\EstatisticasView.xaml;
 
 False
 
