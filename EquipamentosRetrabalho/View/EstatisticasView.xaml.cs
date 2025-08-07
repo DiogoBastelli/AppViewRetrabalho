@@ -20,6 +20,8 @@ namespace EquipamentosRetrabalho.View
 {
     public partial class EstatisticasView : UserControl
     {
+        public LiveChartsCore.Drawing.Padding DrawMargin { get; set; } = new(0, 0, 0, 0);
+
         public EstatisticasView()
         {
             InitializeComponent();

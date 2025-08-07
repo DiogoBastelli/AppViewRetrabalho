@@ -7,7 +7,7 @@
              xmlns:lvc="clr-namespace:LiveChartsCore.SkiaSharpView.WPF;assembly=LiveChartsCore.SkiaSharpView.WPF"
              mc:Ignorable="d">
 
-    <ScrollViewer>
+    <ScrollViewer Height="596">
         <StackPanel Margin="20">
             <TextBlock Text="{Binding TotalRetrabalhadosTexto}" FontSize="18" FontWeight="Bold" Margin="0,0,0,10"/>
             <TextBlock Text="{Binding QuantidadeMotoresTexto}" FontSize="16" Foreground="DarkBlue"/>
@@ -19,11 +19,28 @@
             <TextBlock Text="Quantidade por tipo de redutor:" FontWeight="Bold" />
             <ListBox ItemsSource="{Binding QuantidadePorTipoRedutor}" Margin="0,5,0,15" />
 
-            <TextBlock Text="Gráfico de Motores e Redutores:" FontWeight="Bold" Margin="0,20,0,10"/>
-            <lvc:CartesianChart Series="{Binding Series}"
-                                XAxes="{Binding XAxes}"
-                                YAxes="{Binding YAxes}"
-                                Height="300"/>
+            <TextBlock Text="Gráfico de Motores e Redutores:" FontWeight="Bold" Margin="0,0,0,0"/>
+            <lvc:CartesianChart
+                Series="{Binding Series}"
+                XAxes="{Binding XAxes}"
+                YAxes="{Binding YAxes}"
+                DrawMargin="{Binding DrawMargin}"
+                DrawMarginFrame="{x:Null}"
+                Height="300"
+                Width="600"
+                HorizontalAlignment="Left"
+            />  
+
+            <TextBlock Text="Gráfico de Redutores por Tipo (Pizza):" FontWeight="Bold" Margin="0,20,0,0"/>
+            <lvc:PieChart 
+                Series="{Binding RedutoresPieSeries}" 
+                LegendPosition="Right" 
+                Height="300"
+                Width="400"
+                HorizontalAlignment="Left" 
+             />   
+
+
         </StackPanel>
     </ScrollViewer>
 </UserControl>
