@@ -8,6 +8,7 @@ using LiveChartsCore.SkiaSharpView;
 using LiveChartsCore.Measure;
 using LiveChartsCore.SkiaSharpView.Painting;
 using SkiaSharp;
+using System.Text;
 
 namespace EquipamentosRetrabalho.ViewModel
 {
@@ -21,24 +22,34 @@ namespace EquipamentosRetrabalho.ViewModel
         public string QuantidadeMotoresTexto { get; set; } = "";
         public string TotalRetrabalhadosTexto { get; set; } = "";
 
+        private string _quantidadePorDefeitoTexto = "";
+        public string QuantidadePorDefeitoTexto
+        {
+            get => _quantidadePorDefeitoTexto;
+            set
+            {
+                _quantidadePorDefeitoTexto = value;
+                OnPropertyChanged();
+            }
+        }
+
         public ObservableCollection<string> QuantidadePorTipo { get; set; } = new();
         public ObservableCollection<string> QuantidadePorTipoRedutor { get; set; } = new();
 
-        // Propriedades para o gráfico
-        public ISeries[] Series { get; set; } = System.Array.Empty<ISeries>();
-        public Axis[] XAxes { get; set; } = System.Array.Empty<Axis>();
-        public Axis[] YAxes { get; set; } = System.Array.Empty<Axis>();
+        public ISeries[] Series { get; set; } = Array.Empty<ISeries>();
+        public Axis[] XAxes { get; set; } = Array.Empty<Axis>();
+        public Axis[] YAxes { get; set; } = Array.Empty<Axis>();
 
         private readonly string _connectionString = "Server=localhost;Database=sew;Uid=root;Pwd=root;";
 
         private readonly List<string> defeitosDeMotor = new()
         {
-            "fuga","curto"
+            "fuga","curto", "corrente alta" , "freio" , "resina" , "ruido motor"
         };
 
         private readonly List<string> defeitosDeRedutor = new()
         {
-            "batida",
+            "batida","batida pinhao" , "batida entrada" , "batida intermediaria" , "batida saida" , "ruido redutor",
         };
 
         public EstatisticasViewModel()
@@ -50,6 +61,7 @@ namespace EquipamentosRetrabalho.ViewModel
         {
             var contagemPorEquipamento = new Dictionary<string, int>();
             var contagemPorTipoRedutor = new Dictionary<string, int>();
+            var contagemPorDefeito = new Dictionary<string, int>();
 
             var motoresPorMes = new Dictionary<int, int>();
             var redutoresPorMes = new Dictionary<int, int>();
@@ -61,51 +73,81 @@ namespace EquipamentosRetrabalho.ViewModel
             using var conn = new MySqlConnection(_connectionString);
             conn.Open();
 
-            string query = "SELECT equipamento, IFNULL(reprovado, 0) AS reprovado, defeito, MONTH(data) AS mes FROM controle_lotes WHERE status = 'Aguardando Retrabalho'";
+            string queryDefeitos = @"
+            SELECT defeito, COUNT(*) AS total
+            FROM controle_lotes
+            WHERE defeito IN (
+                'fuga', 'curto', 'corrente alta', 'freio', 'resina', 'ruido motor',
+                'batida', 'batida pinhao', 'batida entrada', 'batida intermediaria', 'batida saida', 'ruido redutor'
+            )
+            GROUP BY defeito;";
 
-            using var cmd = new MySqlCommand(query, conn);
-            using var reader = cmd.ExecuteReader();
-
-            while (reader.Read())
+            using (var cmd = new MySqlCommand(queryDefeitos, conn))
+            using (var reader = cmd.ExecuteReader())
             {
-                string equipamento = reader["equipamento"]?.ToString() ?? "Desconhecido";
-                string defeito = reader["defeito"]?.ToString()?.ToLower() ?? "";
-                int qtdReprovado = Convert.ToInt32(reader["reprovado"]);
-                int mes = Convert.ToInt32(reader["mes"]);
-
-                totalReprovados += qtdReprovado;
-
-                if (contagemPorEquipamento.ContainsKey(equipamento))
-                    contagemPorEquipamento[equipamento] += qtdReprovado;
-                else
-                    contagemPorEquipamento[equipamento] = qtdReprovado;
-
-                if (!string.IsNullOrWhiteSpace(equipamento))
+                while (reader.Read())
                 {
-                    string tipo = equipamento.Substring(0, 1).ToUpper();
-                    if (contagemPorTipoRedutor.ContainsKey(tipo))
-                        contagemPorTipoRedutor[tipo] += qtdReprovado;
-                    else
-                        contagemPorTipoRedutor[tipo] = qtdReprovado;
+                    string defeito = reader["defeito"]?.ToString() ?? "";
+                    int total = Convert.ToInt32(reader["total"]);
+                    contagemPorDefeito[defeito] = total;
                 }
+            }
 
-                if (defeitosDeMotor.Any(d => defeito.Contains(d)))
+            StringBuilder sb = new StringBuilder();
+            foreach (var kv in contagemPorDefeito.OrderBy(k => k.Key))
+            {
+                sb.AppendLine($"{kv.Key}: {kv.Value}");
+            }
+            QuantidadePorDefeitoTexto = sb.ToString();
+
+            string queryPrincipal = @"
+            SELECT equipamento, IFNULL(reprovado, 0) AS reprovado, defeito, MONTH(data) AS mes
+            FROM controle_lotes
+            WHERE status = 'Aguardando Retrabalho'";
+
+            using (var cmd = new MySqlCommand(queryPrincipal, conn))
+            using (var reader = cmd.ExecuteReader())
+            {
+                while (reader.Read())
                 {
-                    totalMotores += qtdReprovado;
+                    string equipamento = reader["equipamento"]?.ToString() ?? "Desconhecido";
+                    string defeito = reader["defeito"]?.ToString()?.ToLower() ?? "";
+                    int qtdReprovado = Convert.ToInt32(reader["reprovado"]);
+                    int mes = Convert.ToInt32(reader["mes"]);
 
-                    if (motoresPorMes.ContainsKey(mes))
-                        motoresPorMes[mes] += qtdReprovado;
-                    else
-                        motoresPorMes[mes] = qtdReprovado;
-                }
-                else if (defeitosDeRedutor.Any(d => defeito.Contains(d)))
-                {
-                    totalRedutores += qtdReprovado;
+                    totalReprovados += qtdReprovado;
 
-                    if (redutoresPorMes.ContainsKey(mes))
-                        redutoresPorMes[mes] += qtdReprovado;
+                    if (contagemPorEquipamento.ContainsKey(equipamento))
+                        contagemPorEquipamento[equipamento] += qtdReprovado;
                     else
-                        redutoresPorMes[mes] = qtdReprovado;
+                        contagemPorEquipamento[equipamento] = qtdReprovado;
+
+                    if (!string.IsNullOrWhiteSpace(equipamento))
+                    {
+                        string tipo = equipamento.Substring(0, 1).ToUpper();
+                        if (contagemPorTipoRedutor.ContainsKey(tipo))
+                            contagemPorTipoRedutor[tipo] += qtdReprovado;
+                        else
+                            contagemPorTipoRedutor[tipo] = qtdReprovado;
+                    }
+
+                    if (defeitosDeMotor.Any(d => defeito.Contains(d)))
+                    {
+                        totalMotores += qtdReprovado;
+                        if (motoresPorMes.ContainsKey(mes))
+                            motoresPorMes[mes] += qtdReprovado;
+                        else
+                            motoresPorMes[mes] = qtdReprovado;
+                    }
+
+                    else if (defeitosDeRedutor.Any(d => defeito.Contains(d)))
+                    {
+                        totalRedutores += qtdReprovado;
+                        if (redutoresPorMes.ContainsKey(mes))
+                            redutoresPorMes[mes] += qtdReprovado;
+                        else
+                            redutoresPorMes[mes] = qtdReprovado;
+                    }
                 }
             }
 
@@ -151,29 +193,16 @@ namespace EquipamentosRetrabalho.ViewModel
                 }
             };
 
-            DrawMargin = new LiveChartsCore.Drawing.Padding(0, 0, 0, 0); // margem do gráfico
-
             YAxes = new Axis[]
             {
-            new Axis
-            {
-                Labeler = value => ((int)value).ToString(),
-                MinLimit = 0,
-                Padding = new LiveChartsCore.Drawing.Padding(0, 0, 10, 0), // controla espaço à direita do eixo
-                SeparatorsPaint = new SolidColorPaint(SKColors.LightGray)
-            }
-                    };
-
-
-
-            OnPropertyChanged(nameof(TotalRetrabalhadosTexto));
-            OnPropertyChanged(nameof(QuantidadeMotoresTexto));
-            OnPropertyChanged(nameof(QuantidadeRedutoresTexto));
-            OnPropertyChanged(nameof(QuantidadePorTipo));
-            OnPropertyChanged(nameof(QuantidadePorTipoRedutor));
-            OnPropertyChanged(nameof(Series));
-            OnPropertyChanged(nameof(XAxes));
-            OnPropertyChanged(nameof(YAxes));
+                new Axis
+                {
+                    Labeler = value => ((int)value).ToString(),
+                    MinLimit = 0,
+                    Padding = new LiveChartsCore.Drawing.Padding(0, 0, 10, 0),
+                    SeparatorsPaint = new SolidColorPaint(SKColors.LightGray)
+                }
+            };
 
             RedutoresPieSeries = contagemPorTipoRedutor.Select(kv =>
                 new PieSeries<int>
@@ -185,9 +214,16 @@ namespace EquipamentosRetrabalho.ViewModel
                     DataLabelsFormatter = point => $"{point.Context.Series.Name}: {point.PrimaryValue}"
                 }).ToArray();
 
+            OnPropertyChanged(nameof(TotalRetrabalhadosTexto));
+            OnPropertyChanged(nameof(QuantidadeMotoresTexto));
+            OnPropertyChanged(nameof(QuantidadeRedutoresTexto));
+            OnPropertyChanged(nameof(QuantidadePorDefeitoTexto));
+            OnPropertyChanged(nameof(QuantidadePorTipo));
+            OnPropertyChanged(nameof(QuantidadePorTipoRedutor));
+            OnPropertyChanged(nameof(Series));
+            OnPropertyChanged(nameof(XAxes));
+            OnPropertyChanged(nameof(YAxes));
             OnPropertyChanged(nameof(RedutoresPieSeries));
-
-
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;

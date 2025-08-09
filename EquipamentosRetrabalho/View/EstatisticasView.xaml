@@ -12,12 +12,17 @@
             <TextBlock Text="{Binding TotalRetrabalhadosTexto}" FontSize="18" FontWeight="Bold" Margin="0,0,0,10"/>
             <TextBlock Text="{Binding QuantidadeMotoresTexto}" FontSize="16" Foreground="DarkBlue"/>
             <TextBlock Text="{Binding QuantidadeRedutoresTexto}" FontSize="16" Foreground="DarkRed" Margin="0,0,0,20"/>
+            <TextBlock Text="{Binding QuantidadePorDefeitoTexto}" FontSize="16" />
+
 
             <TextBlock Text="Quantidade por equipamento:" FontWeight="Bold" />
             <ListBox ItemsSource="{Binding QuantidadePorTipo}" Margin="0,5,0,15" />
 
             <TextBlock Text="Quantidade por tipo de redutor:" FontWeight="Bold" />
             <ListBox ItemsSource="{Binding QuantidadePorTipoRedutor}" Margin="0,5,0,15" />
+
+            <TextBlock Text="Quantidade por tipo de Defeito:" FontWeight="Bold" />
+            <ListBox ItemsSource="{Binding QuantidadePorDefeito}" Margin="0,5,0,15" />
 
             <TextBlock Text="Gráfico de Motores e Redutores:" FontWeight="Bold" Margin="0,0,0,0"/>
             <lvc:CartesianChart
