@@ -73,37 +73,10 @@ namespace EquipamentosRetrabalho.ViewModel
             using var conn = new MySqlConnection(_connectionString);
             conn.Open();
 
-            string queryDefeitos = @"
-            SELECT defeito, COUNT(*) AS total
-            FROM controle_lotes
-            WHERE defeito IN (
-                'fuga', 'curto', 'corrente alta', 'freio', 'resina', 'ruido motor',
-                'batida', 'batida pinhao', 'batida entrada', 'batida intermediaria', 'batida saida', 'ruido redutor'
-            )
-            GROUP BY defeito;";
-
-            using (var cmd = new MySqlCommand(queryDefeitos, conn))
-            using (var reader = cmd.ExecuteReader())
-            {
-                while (reader.Read())
-                {
-                    string defeito = reader["defeito"]?.ToString() ?? "";
-                    int total = Convert.ToInt32(reader["total"]);
-                    contagemPorDefeito[defeito] = total;
-                }
-            }
-
-            StringBuilder sb = new StringBuilder();
-            foreach (var kv in contagemPorDefeito.OrderBy(k => k.Key))
-            {
-                sb.AppendLine($"{kv.Key}: {kv.Value}");
-            }
-            QuantidadePorDefeitoTexto = sb.ToString();
-
             string queryPrincipal = @"
-            SELECT equipamento, IFNULL(reprovado, 0) AS reprovado, defeito, MONTH(data) AS mes
-            FROM controle_lotes
-            WHERE status = 'Aguardando Retrabalho'";
+        SELECT equipamento, IFNULL(reprovado, 0) AS reprovado, defeito, MONTH(data) AS mes
+        FROM controle_lotes
+        WHERE status = 'Aguardando Retrabalho'";
 
             using (var cmd = new MySqlCommand(queryPrincipal, conn))
             using (var reader = cmd.ExecuteReader())
@@ -131,6 +104,11 @@ namespace EquipamentosRetrabalho.ViewModel
                             contagemPorTipoRedutor[tipo] = qtdReprovado;
                     }
 
+                    if (contagemPorDefeito.ContainsKey(defeito))
+                        contagemPorDefeito[defeito] += qtdReprovado;
+                    else
+                        contagemPorDefeito[defeito] = qtdReprovado;
+
                     if (defeitosDeMotor.Any(d => defeito.Contains(d)))
                     {
                         totalMotores += qtdReprovado;
@@ -139,7 +117,6 @@ namespace EquipamentosRetrabalho.ViewModel
                         else
                             motoresPorMes[mes] = qtdReprovado;
                     }
-
                     else if (defeitosDeRedutor.Any(d => defeito.Contains(d)))
                     {
                         totalRedutores += qtdReprovado;
@@ -151,13 +128,19 @@ namespace EquipamentosRetrabalho.ViewModel
                 }
             }
 
-            TotalRetrabalhadosTexto = $"Total de equipamentos em retrabalho: {totalReprovados}";
-            QuantidadeMotoresTexto = $"Total de MOTORES com defeito: {totalMotores}";
-            QuantidadeRedutoresTexto = $"Total de REDUTORES com defeito: {totalRedutores}";
+            TotalRetrabalhadosTexto = $"Total: {totalReprovados}";
+            QuantidadeMotoresTexto = $"Motor: {totalMotores}";
+            QuantidadeRedutoresTexto = $"Redutor: {totalRedutores}";
 
-            QuantidadePorTipo.Clear();
-            foreach (var kv in contagemPorEquipamento.OrderBy(k => k.Key))
-                QuantidadePorTipo.Add($"Equipamento {kv.Key}: {kv.Value} unidades");
+            var defeitosOrdenados = contagemPorDefeito
+                .OrderByDescending(kv => kv.Value)
+                .Select(kv =>
+                {
+                    double porcentagem = totalReprovados > 0 ? (kv.Value * 100.0) / totalReprovados : 0;
+                    return $"{kv.Key}: {kv.Value} ({porcentagem:F1}%)";
+                });
+
+            QuantidadePorDefeitoTexto = string.Join("\n", defeitosOrdenados);
 
             QuantidadePorTipoRedutor.Clear();
             foreach (var kv in contagemPorTipoRedutor.OrderBy(k => k.Key))
@@ -172,37 +155,12 @@ namespace EquipamentosRetrabalho.ViewModel
 
             Series = new ISeries[]
             {
-                new LiveChartsCore.SkiaSharpView.ColumnSeries<int>
-                {
-                    Values = motoresValores,
-                    Name = "Motores"
-                },
-                new LiveChartsCore.SkiaSharpView.ColumnSeries<int>
-                {
-                    Values = redutoresValores,
-                    Name = "Redutores"
-                }
+        new LiveChartsCore.SkiaSharpView.ColumnSeries<int> { Values = motoresValores, Name = "Motores" },
+        new LiveChartsCore.SkiaSharpView.ColumnSeries<int> { Values = redutoresValores, Name = "Redutores" }
             };
 
-            XAxes = new Axis[]
-            {
-                new Axis
-                {
-                    Labels = labels,
-                    SeparatorsPaint = new SolidColorPaint(SKColors.LightGray)
-                }
-            };
-
-            YAxes = new Axis[]
-            {
-                new Axis
-                {
-                    Labeler = value => ((int)value).ToString(),
-                    MinLimit = 0,
-                    Padding = new LiveChartsCore.Drawing.Padding(0, 0, 10, 0),
-                    SeparatorsPaint = new SolidColorPaint(SKColors.LightGray)
-                }
-            };
+            XAxes = new Axis[] { new Axis { Labels = labels, SeparatorsPaint = new SolidColorPaint(SKColors.LightGray) } };
+            YAxes = new Axis[] { new Axis { Labeler = value => ((int)value).ToString(), MinLimit = 0, Padding = new LiveChartsCore.Drawing.Padding(0, 0, 10, 0), SeparatorsPaint = new SolidColorPaint(SKColors.LightGray) } };
 
             RedutoresPieSeries = contagemPorTipoRedutor.Select(kv =>
                 new PieSeries<int>
@@ -218,13 +176,13 @@ namespace EquipamentosRetrabalho.ViewModel
             OnPropertyChanged(nameof(QuantidadeMotoresTexto));
             OnPropertyChanged(nameof(QuantidadeRedutoresTexto));
             OnPropertyChanged(nameof(QuantidadePorDefeitoTexto));
-            OnPropertyChanged(nameof(QuantidadePorTipo));
             OnPropertyChanged(nameof(QuantidadePorTipoRedutor));
             OnPropertyChanged(nameof(Series));
             OnPropertyChanged(nameof(XAxes));
             OnPropertyChanged(nameof(YAxes));
             OnPropertyChanged(nameof(RedutoresPieSeries));
         }
+
 
         public event PropertyChangedEventHandler? PropertyChanged;
         protected void OnPropertyChanged([CallerMemberName] string? nome = null)
