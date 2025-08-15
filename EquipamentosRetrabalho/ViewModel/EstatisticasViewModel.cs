@@ -35,12 +35,21 @@ namespace EquipamentosRetrabalho.ViewModel
 
         public ObservableCollection<string> QuantidadePorTipo { get; set; } = new();
         public ObservableCollection<string> QuantidadePorTipoRedutor { get; set; } = new();
+        public ObservableCollection<DefeitoEstatistica> DefeitosOrdenados { get; set; } = new();
+
 
         public ISeries[] Series { get; set; } = Array.Empty<ISeries>();
         public Axis[] XAxes { get; set; } = Array.Empty<Axis>();
         public Axis[] YAxes { get; set; } = Array.Empty<Axis>();
 
+
         private readonly string _connectionString = "Server=localhost;Database=sew;Uid=root;Pwd=root;";
+        public class DefeitoEstatistica
+        {
+            public int Posicao { get; set; }      
+            public string Nome { get; set; } = "";
+            public double Percentual { get; set; } 
+        }
 
         private readonly List<string> defeitosDeMotor = new()
         {
@@ -132,15 +141,23 @@ namespace EquipamentosRetrabalho.ViewModel
             QuantidadeMotoresTexto = $"Motor: {totalMotores}";
             QuantidadeRedutoresTexto = $"Redutor: {totalRedutores}";
 
-            var defeitosOrdenados = contagemPorDefeito
-                .OrderByDescending(kv => kv.Value)
-                .Select(kv =>
-                {
-                    double porcentagem = totalReprovados > 0 ? (kv.Value * 100.0) / totalReprovados : 0;
-                    return $"{kv.Key}: {kv.Value} ({porcentagem:F1}%)";
-                });
+            DefeitosOrdenados.Clear();
 
-            QuantidadePorDefeitoTexto = string.Join("\n", defeitosOrdenados);
+            int pos = 1;
+            foreach (var kv in contagemPorDefeito.OrderByDescending(kv => kv.Value))
+            {
+                double porcentagem = totalReprovados > 0 ? (kv.Value * 100.0) / totalReprovados : 0;
+
+                DefeitosOrdenados.Add(new DefeitoEstatistica
+                {
+                    Posicao = pos++,
+                    Nome = kv.Key,
+                    Percentual = Math.Round(porcentagem, 1)
+                });
+            }
+
+            OnPropertyChanged(nameof(DefeitosOrdenados));
+
 
             QuantidadePorTipoRedutor.Clear();
             foreach (var kv in contagemPorTipoRedutor.OrderBy(k => k.Key))
