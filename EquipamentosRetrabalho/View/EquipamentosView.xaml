@@ -13,7 +13,6 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <!-- Campo de pesquisa -->
         <StackPanel Orientation="Horizontal" Margin="10">
             <TextBlock Text="Pesquisar por:" VerticalAlignment="Center" Margin="0,0,10,0"/>
 
@@ -26,12 +25,11 @@
              Text="{Binding FiltroPesquisa, UpdateSourceTrigger=PropertyChanged}" />
         </StackPanel>
 
-
-        <!-- Tabela de equipamentos -->
         <DataGrid Grid.Row="1"
                   ItemsSource="{Binding Equipamentos}"
                   AutoGenerateColumns="False"
-                  IsReadOnly="True">
+                  IsReadOnly="True"
+                  FontSize="17">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="OM" Binding="{Binding OrdemMontagem}" />
                 <DataGridTextColumn Header="OV" Binding="{Binding OrdemVenda}" />

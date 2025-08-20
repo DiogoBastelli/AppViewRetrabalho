@@ -9,11 +9,19 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="imagens\logoSEW.png" />
+  </ItemGroup>
+
+  <ItemGroup>
 	<PackageReference Include="MySql.Data" Version="9.4.0" />
 	<PackageReference Include="SkiaSharp" Version="2.88.3" />
 	<PackageReference Include="SkiaSharp.Views.WPF" Version="2.88.3" />
 	<PackageReference Include="LiveChartsCore" Version="2.0.0-beta.500" />
 	<PackageReference Include="LiveChartsCore.SkiaSharpView.WPF" Version="2.0.0-beta.500" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="imagens\logoSEW.png" />
   </ItemGroup>
 
 </Project>
