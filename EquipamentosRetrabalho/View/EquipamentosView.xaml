@@ -13,7 +13,7 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <StackPanel Orientation="Horizontal" Margin="10">
+        <StackPanel Orientation="Horizontal" Margin="10" >
             <TextBlock Text="Pesquisar por:" VerticalAlignment="Center" Margin="0,0,10,0"/>
 
             <ComboBox Width="150"
@@ -25,11 +25,10 @@
              Text="{Binding FiltroPesquisa, UpdateSourceTrigger=PropertyChanged}" />
         </StackPanel>
 
-        <DataGrid Grid.Row="1"
-                  ItemsSource="{Binding Equipamentos}"
-                  AutoGenerateColumns="False"
-                  IsReadOnly="True"
-                  FontSize="17">
+        <DataGrid ItemsSource="{Binding Equipamentos}" 
+          AutoGenerateColumns="False"
+          IsReadOnly="True"
+          FontSize="16">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="OM" Binding="{Binding OrdemMontagem}" />
                 <DataGridTextColumn Header="OV" Binding="{Binding OrdemVenda}" />
@@ -40,8 +39,10 @@
                 <DataGridTextColumn Header="Reprovado" Binding="{Binding Reprovado}" />
                 <DataGridTextColumn Header="Status" Binding="{Binding Status}" />
                 <DataGridTextColumn Header="Defeito" Binding="{Binding Defeito}" />
-                <DataGridTextColumn Header="Data" Binding="{Binding Data}" />
+                <DataGridTextColumn Header="Data" Binding="{Binding Data, StringFormat={}{0:dd/MM/yyyy}}" />
+
                 <DataGridTextColumn Header="Local" Binding="{Binding Local}" />
+                <DataGridTextColumn Header="Data Finalizado" Binding="{Binding DataFinalizacao, StringFormat=\{0:dd/MM/yyyy\}}" />
             </DataGrid.Columns>
         </DataGrid>
     </Grid>
