@@ -12,7 +12,6 @@ namespace EquipamentosRetrabalho.ViewModel
     {
         private readonly string _connectionString = "Server=localhost;Database=sew;Uid=root;Pwd=root;";
 
-        // Timer para atualizar a tabela
         private readonly System.Timers.Timer _timer;
 
         public ObservableCollection<EquipamentosModel> Equipamentos { get; set; } = new();
@@ -40,15 +39,12 @@ namespace EquipamentosRetrabalho.ViewModel
                 CarregarEquipamentos(FiltroPesquisa);
             }
         }
-
         public List<string> FiltrosDisponiveis { get; } = new() { "cliente", "ordem_montagem" };
 
         public EquipamentosViewModel()
         {
-            // Carrega os equipamentos inicialmente
             CarregarEquipamentos();
 
-            // Configura o Timer para atualizar a cada 5 segundos (5000 ms)
             _timer = new System.Timers.Timer(5000);
             _timer.Elapsed += Timer_Elapsed;
             _timer.AutoReset = true;
@@ -57,7 +53,6 @@ namespace EquipamentosRetrabalho.ViewModel
 
         private void Timer_Elapsed(object? sender, ElapsedEventArgs e)
         {
-            // Atualiza a tabela na thread da UI
             App.Current.Dispatcher.Invoke(() => CarregarEquipamentos(FiltroPesquisa));
         }
 
