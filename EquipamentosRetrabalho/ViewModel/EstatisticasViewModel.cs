@@ -9,6 +9,7 @@ using LiveChartsCore.Measure;
 using LiveChartsCore.SkiaSharpView.Painting;
 using SkiaSharp;
 using System.Text;
+using System.Windows;
 
 namespace EquipamentosRetrabalho.ViewModel
 {
@@ -44,6 +45,20 @@ namespace EquipamentosRetrabalho.ViewModel
 
 
         private readonly string _connectionString = "Server=localhost;Database=sew;Uid=root;Pwd=root;";
+
+
+        private string _mediaTempo;
+        public string MediaTempo
+        {
+            get => _mediaTempo;
+            set
+            {
+                _mediaTempo = value;
+                OnPropertyChanged();
+            }
+        }
+
+
         public class DefeitoEstatistica
         {
             public int Posicao { get; set; }      
@@ -64,6 +79,7 @@ namespace EquipamentosRetrabalho.ViewModel
         public EstatisticasViewModel()
         {
             CarregarEstatisticas();
+            CalcularMediaTempo();
         }
 
         private void CarregarEstatisticas()
@@ -200,6 +216,48 @@ namespace EquipamentosRetrabalho.ViewModel
             OnPropertyChanged(nameof(RedutoresPieSeries));
         }
 
+        public void CalcularMediaTempo()
+        {
+            try
+            {
+                using var conn = new MySqlConnection(_connectionString);
+                conn.Open();
+
+                string query = @"
+                SELECT TIMESTAMPDIFF(SECOND, data, data_finalizacao) AS segundos
+                FROM controle_lotes
+                WHERE data_finalizacao IS NOT NULL";
+
+                using var cmd = new MySqlCommand(query, conn);
+                using var reader = cmd.ExecuteReader();
+
+                var listaSegundos = new List<int>();
+
+                while (reader.Read())
+                {
+                    if (!reader.IsDBNull(reader.GetOrdinal("segundos")))
+                    {
+                        listaSegundos.Add(reader.GetInt32("segundos"));
+                    }
+                }
+
+                if (listaSegundos.Any())
+                {
+                    var mediaSegundos = listaSegundos.Average();
+                    var media = TimeSpan.FromSeconds(mediaSegundos);
+
+                    MediaTempo = $"Média: {media.Days} dias, {media.Hours} horas e {media.Minutes} minutos";
+                }
+                else
+                {
+                    MediaTempo = "Nenhuma ordem finalizada ainda.";
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Erro ao calcular média: {ex.Message}");
+            }
+        }
 
         public event PropertyChangedEventHandler? PropertyChanged;
         protected void OnPropertyChanged([CallerMemberName] string? nome = null)

@@ -45,6 +45,11 @@
                 </DataGrid.Columns>
             </DataGrid>
 
+            <TextBlock Text="{Binding MediaTempo}" 
+           FontSize="16" 
+           FontWeight="Bold" 
+           Margin="10"/>
+
         </StackPanel>
     </ScrollViewer>
 </UserControl>

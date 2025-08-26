@@ -5,12 +5,14 @@ using System.Runtime.CompilerServices;
 using System.Timers;
 using MySql.Data.MySqlClient;
 using EquipamentosRetrabalho.Model;
+using System.Windows;
 
 namespace EquipamentosRetrabalho.ViewModel
 {
     public class EquipamentosViewModel : INotifyPropertyChanged
     {
         private readonly string _connectionString = "Server=localhost;Database=sew;Uid=root;Pwd=root;";
+
 
         private readonly System.Timers.Timer _timer;
 
@@ -44,13 +46,14 @@ namespace EquipamentosRetrabalho.ViewModel
         public EquipamentosViewModel()
         {
             CarregarEquipamentos();
+            
 
             _timer = new System.Timers.Timer(5000);
             _timer.Elapsed += Timer_Elapsed;
             _timer.AutoReset = true;
             _timer.Start();
         }
-
+        
         private void Timer_Elapsed(object? sender, ElapsedEventArgs e)
         {
             App.Current.Dispatcher.Invoke(() => CarregarEquipamentos(FiltroPesquisa));
