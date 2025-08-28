@@ -10,6 +10,8 @@ using LiveChartsCore.SkiaSharpView.Painting;
 using SkiaSharp;
 using System.Text;
 using System.Windows;
+using LiveChartsCore.Themes;
+using System.Windows.Controls.Primitives;
 
 namespace EquipamentosRetrabalho.ViewModel
 {
@@ -80,6 +82,7 @@ namespace EquipamentosRetrabalho.ViewModel
         {
             CarregarEstatisticas();
             CalcularMediaTempo();
+            CalcularMediaPorTipo();
         }
 
         private void CarregarEstatisticas()
@@ -258,6 +261,72 @@ namespace EquipamentosRetrabalho.ViewModel
                 MessageBox.Show($"Erro ao calcular média: {ex.Message}");
             }
         }
+
+        private string _mediaPorTipoTexto;
+        public string MediaPorTipoTexto
+        {
+            get => _mediaPorTipoTexto;
+            set
+            {
+                _mediaPorTipoTexto = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public void CalcularMediaPorTipo()
+        {
+            try
+            {
+                using var conn = new MySqlConnection(_connectionString);
+                conn.Open();
+
+                string query = @"
+            SELECT equipamento, TIMESTAMPDIFF(SECOND, data, data_finalizacao) AS segundos
+            FROM controle_lotes
+            WHERE data_finalizacao IS NOT NULL";
+
+                using var cmd = new MySqlCommand(query, conn);
+                using var reader = cmd.ExecuteReader();
+
+                var tempoPorTipo = new Dictionary<string, double>();
+                var contagemPorTipo = new Dictionary<string, int>();
+
+                while (reader.Read())
+                {
+                    string equipamento = reader["equipamento"].ToString();
+                    int segundos = Convert.ToInt32(reader["segundos"]);
+                    string tipo = equipamento.Substring(0, 1).ToUpper();
+
+                    if (tempoPorTipo.ContainsKey(tipo))
+                    {
+                        tempoPorTipo[tipo] += segundos;
+                        contagemPorTipo[tipo] += 1;
+                    }
+                    else
+                    {
+                        tempoPorTipo[tipo] = segundos;
+                        contagemPorTipo[tipo] = 1;
+                    }
+                }
+
+                var sb = new StringBuilder();
+                foreach (var kv in tempoPorTipo)
+                {
+                    double mediaSegundos = kv.Value / contagemPorTipo[kv.Key];
+                    TimeSpan media = TimeSpan.FromSeconds(mediaSegundos);
+
+                    sb.AppendLine($"Tipo {kv.Key}: {media.Days} dias, {media.Hours} horas, {media.Minutes} minutos");
+                }
+
+                MediaPorTipoTexto = sb.ToString();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Erro ao calcular média do tempo de retrabalho por tipo: {ex.Message}");
+            }
+        }
+
+
 
         public event PropertyChangedEventHandler? PropertyChanged;
         protected void OnPropertyChanged([CallerMemberName] string? nome = null)

@@ -50,6 +50,11 @@
            FontWeight="Bold" 
            Margin="10"/>
 
+            <TextBlock Text="{Binding MediaPorTipoTexto}" 
+            FontSize="16" 
+            FontWeight="Bold" 
+            Margin="10"/>
+
         </StackPanel>
     </ScrollViewer>
 </UserControl>
