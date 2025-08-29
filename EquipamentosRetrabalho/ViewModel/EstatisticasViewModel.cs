@@ -19,6 +19,8 @@ namespace EquipamentosRetrabalho.ViewModel
     {
         public IEnumerable<ISeries> RedutoresPieSeries { get; set; } = Array.Empty<ISeries>();
 
+        public IEnumerable<ISeries> TempoMedioFinalização { get; set; } = Array.Empty<ISeries>();
+
         public LiveChartsCore.Drawing.Padding DrawMargin { get; set; } = new(0, 0, 0, 0);
 
         public string QuantidadeRedutoresTexto { get; set; } = "";
@@ -65,7 +67,9 @@ namespace EquipamentosRetrabalho.ViewModel
         {
             public int Posicao { get; set; }      
             public string Nome { get; set; } = "";
-            public double Percentual { get; set; } 
+            public double Percentual { get; set; }
+            public string PercentualFormatado => $"{Percentual}%";
+            public string PosicaoFormatada => $"{Posicao}º";
         }
 
         private readonly List<string> defeitosDeMotor = new()
@@ -102,9 +106,9 @@ namespace EquipamentosRetrabalho.ViewModel
             conn.Open();
 
             string queryPrincipal = @"
-        SELECT equipamento, IFNULL(reprovado, 0) AS reprovado, defeito, MONTH(data) AS mes
-        FROM controle_lotes
-        WHERE status = 'Aguardando Retrabalho'";
+            SELECT equipamento, IFNULL(reprovado, 0) AS reprovado, defeito, MONTH(data) AS mes
+            FROM controle_lotes
+            WHERE status = 'Aguardando Retrabalho'";
 
             using (var cmd = new MySqlCommand(queryPrincipal, conn))
             using (var reader = cmd.ExecuteReader())
@@ -191,8 +195,8 @@ namespace EquipamentosRetrabalho.ViewModel
 
             Series = new ISeries[]
             {
-        new LiveChartsCore.SkiaSharpView.ColumnSeries<int> { Values = motoresValores, Name = "Motores" },
-        new LiveChartsCore.SkiaSharpView.ColumnSeries<int> { Values = redutoresValores, Name = "Redutores" }
+            new LiveChartsCore.SkiaSharpView.ColumnSeries<int> { Values = motoresValores, Name = "Motores" },
+            new LiveChartsCore.SkiaSharpView.ColumnSeries<int> { Values = redutoresValores, Name = "Redutores" }
             };
 
             XAxes = new Axis[] { new Axis { Labels = labels, SeparatorsPaint = new SolidColorPaint(SKColors.LightGray) } };
@@ -281,9 +285,9 @@ namespace EquipamentosRetrabalho.ViewModel
                 conn.Open();
 
                 string query = @"
-            SELECT equipamento, TIMESTAMPDIFF(SECOND, data, data_finalizacao) AS segundos
-            FROM controle_lotes
-            WHERE data_finalizacao IS NOT NULL";
+                SELECT equipamento, TIMESTAMPDIFF(SECOND, data, data_finalizacao) AS segundos
+                FROM controle_lotes
+                WHERE data_finalizacao IS NOT NULL";
 
                 using var cmd = new MySqlCommand(query, conn);
                 using var reader = cmd.ExecuteReader();
@@ -309,24 +313,41 @@ namespace EquipamentosRetrabalho.ViewModel
                     }
                 }
 
-                var sb = new StringBuilder();
+                var sb = new StringBuilder(); 
+                var series = new List<ISeries>();
+
                 foreach (var kv in tempoPorTipo)
                 {
                     double mediaSegundos = kv.Value / contagemPorTipo[kv.Key];
                     TimeSpan media = TimeSpan.FromSeconds(mediaSegundos);
 
                     sb.AppendLine($"Tipo {kv.Key}: {media.Days} dias, {media.Hours} horas, {media.Minutes} minutos");
+
+                    series.Add(new PieSeries<double>
+                    {
+                        Name = $"Tipo {kv.Key}",
+                        Values = new[] { media.TotalHours },
+                        DataLabelsPaint = new SolidColorPaint(SKColors.White),
+                        DataLabelsPosition = PolarLabelsPosition.Middle,
+                        DataLabelsFormatter = point =>
+                        {
+                            TimeSpan ts = TimeSpan.FromHours(point.PrimaryValue);
+                            return $"{ts.Days}d {ts.Hours}h";
+                        }
+                    });
                 }
 
                 MediaPorTipoTexto = sb.ToString();
+                TempoMedioFinalização = series;
+
+                OnPropertyChanged(nameof(MediaPorTipoTexto));
+                OnPropertyChanged(nameof(TempoMedioFinalização));
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Erro ao calcular média do tempo de retrabalho por tipo: {ex.Message}");
             }
         }
-
-
 
         public event PropertyChangedEventHandler? PropertyChanged;
         protected void OnPropertyChanged([CallerMemberName] string? nome = null)

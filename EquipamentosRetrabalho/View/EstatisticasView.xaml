@@ -39,9 +39,9 @@
           CanUserAddRows="False" CanUserDeleteRows="False" IsReadOnly="True" 
           Margin="10" FontSize="14" RowHeaderWidth="0" Width="406" RenderTransformOrigin="0.186,0.641" HorizontalAlignment="Left">
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="Rank" Binding="{Binding Posicao}" Width="50"/>
+                    <DataGridTextColumn Header="Rank" Binding="{Binding PosicaoFormatada}" Width="50"/>
                     <DataGridTextColumn Header="Defeito" Binding="{Binding Nome}" Width="*"/>
-                    <DataGridTextColumn Header="%" Binding="{Binding Percentual}" Width="80"/>
+                    <DataGridTextColumn Header="Porcentagem" Binding="{Binding PercentualFormatado}" Width="84"/>
                 </DataGrid.Columns>
             </DataGrid>
 
@@ -54,6 +54,15 @@
             FontSize="16" 
             FontWeight="Bold" 
             Margin="10"/>
+
+            <TextBlock Text="Gráfico de tempo medio de finalização:" FontWeight="Bold" Margin="0,20,0,0"/>
+            <lvc:PieChart 
+                Series="{Binding TempoMedioFinalização }" 
+                LegendPosition="Right" 
+                Height="300"
+                Width="400"
+                HorizontalAlignment="Left" 
+             />     
 
         </StackPanel>
     </ScrollViewer>
