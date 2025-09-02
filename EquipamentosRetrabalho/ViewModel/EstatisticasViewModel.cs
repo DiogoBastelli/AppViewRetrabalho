@@ -12,6 +12,7 @@ using System.Text;
 using System.Windows;
 using LiveChartsCore.Themes;
 using System.Windows.Controls.Primitives;
+using System.Windows.Controls;
 
 namespace EquipamentosRetrabalho.ViewModel
 {
@@ -85,7 +86,7 @@ namespace EquipamentosRetrabalho.ViewModel
         public EstatisticasViewModel()
         {
             CarregarEstatisticas();
-            CalcularMediaTempo();
+            //CalcularMediaTempo();
             CalcularMediaPorTipo();
         }
 
@@ -277,7 +278,40 @@ namespace EquipamentosRetrabalho.ViewModel
             }
         }
 
-        public void CalcularMediaPorTipo()
+        private string? _mesSelecionado;
+        public string? MesSelecionado
+        {
+            get => _mesSelecionado;
+            set
+            {
+                _mesSelecionado = value;
+                OnPropertyChanged();
+                int mes = ObterNumeroMes(value ?? "Todos");
+                CalcularMediaPorTipo(mes);
+            }
+        }
+
+        private int ObterNumeroMes(string mes)
+        {
+            return mes switch
+            {
+                "Janeiro" => 1,
+                "Fevereiro" => 2,
+                "Março" => 3,
+                "Abril" => 4,
+                "Maio" => 5,
+                "Junho" => 6,
+                "Julho" => 7,
+                "Agosto" => 8,
+                "Setembro" => 9,
+                "Outubro" => 10,
+                "Novembro" => 11,
+                "Dezembro" => 12,
+                _ => 0 
+            };
+        }
+
+        public void CalcularMediaPorTipo(int mes = 0)
         {
             try
             {
@@ -289,7 +323,16 @@ namespace EquipamentosRetrabalho.ViewModel
                 FROM controle_lotes
                 WHERE data_finalizacao IS NOT NULL";
 
+                if (mes > 0)
+                {
+                    query += " AND MONTH(data) = @mes";
+                }
+
                 using var cmd = new MySqlCommand(query, conn);
+
+                if (mes > 0)
+                    cmd.Parameters.AddWithValue("@mes", mes);
+
                 using var reader = cmd.ExecuteReader();
 
                 var tempoPorTipo = new Dictionary<string, double>();
@@ -313,7 +356,7 @@ namespace EquipamentosRetrabalho.ViewModel
                     }
                 }
 
-                var sb = new StringBuilder(); 
+                var sb = new StringBuilder();
                 var series = new List<ISeries>();
 
                 foreach (var kv in tempoPorTipo)
@@ -348,6 +391,7 @@ namespace EquipamentosRetrabalho.ViewModel
                 MessageBox.Show($"Erro ao calcular média do tempo de retrabalho por tipo: {ex.Message}");
             }
         }
+
 
         public event PropertyChangedEventHandler? PropertyChanged;
         protected void OnPropertyChanged([CallerMemberName] string? nome = null)

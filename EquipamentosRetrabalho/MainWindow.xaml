@@ -16,7 +16,7 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <Border Grid.Row="0" Background="#000714" BorderBrush="#A1020F" BorderThickness="0,0,0,3" Grid.ColumnSpan="2">
+        <Border Grid.Row="0" Background="#000714" BorderBrush="#A1020F" BorderThickness="0,0,0,5" Grid.ColumnSpan="2">
             <DockPanel VerticalAlignment="Center">
                 <Image Source="Imagens/logoSEW.png" DockPanel.Dock="Left" Margin="50,0,0,0"/>
                 <DockPanel>

@@ -62,7 +62,25 @@
                 Height="300"
                 Width="400"
                 HorizontalAlignment="Left" 
-             />     
+             />
+
+            <ComboBox Width="150"
+          SelectedItem="{Binding MesSelecionado, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                <ComboBoxItem IsSelected="True" IsEnabled="False">Selecione um mês</ComboBoxItem>
+                <ComboBoxItem>Todos</ComboBoxItem>
+                <ComboBoxItem>Janeiro</ComboBoxItem>
+                <ComboBoxItem>Fevereiro</ComboBoxItem>
+                <ComboBoxItem>Março</ComboBoxItem>
+                <ComboBoxItem>Abril</ComboBoxItem>
+                <ComboBoxItem>Maio</ComboBoxItem>
+                <ComboBoxItem>Junho</ComboBoxItem>
+                <ComboBoxItem>Julho</ComboBoxItem>
+                <ComboBoxItem>Agosto</ComboBoxItem>
+                <ComboBoxItem>Setembro</ComboBoxItem>
+                <ComboBoxItem>Outubro</ComboBoxItem>
+                <ComboBoxItem>Novembro</ComboBoxItem>
+                <ComboBoxItem>Dezembro</ComboBoxItem>
+            </ComboBox>
 
         </StackPanel>
     </ScrollViewer>
