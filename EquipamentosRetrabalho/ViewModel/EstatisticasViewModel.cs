@@ -278,6 +278,94 @@ namespace EquipamentosRetrabalho.ViewModel
             }
         }
 
+        private string? _mesSelecionadoTipoRedutor;
+        public string? MesSelecionadoTipoRedutor
+        {
+            get => _mesSelecionadoTipoRedutor;
+            set
+            {
+                _mesSelecionadoTipoRedutor = value;
+                OnPropertyChanged();
+                int mes = ObterNumeroMes(value ?? "Todos");
+                CalcularRedutoresPorTipo(mes);
+            }
+        }
+
+
+        public void CalcularRedutoresPorTipo(int mes = 0)
+        {
+            using var conn = new MySqlConnection(_connectionString);
+            conn.Open();
+
+            string query = @"
+        SELECT equipamento, IFNULL(reprovado, 0) AS reprovado
+        FROM controle_lotes
+        WHERE status='Aguardando Retrabalho'";
+
+            if (mes > 0)
+                query += " AND MONTH(data) = @mes";
+
+            using var cmd = new MySqlCommand(query, conn);
+            if (mes > 0)
+                cmd.Parameters.AddWithValue("@mes", mes);
+
+            using var reader = cmd.ExecuteReader();
+
+            var contagemPorTipoRedutor = new Dictionary<string, int>();
+            int totalMotores = 0;
+            int totalRedutores = 0;
+            int totalReprovados = 0;
+
+            while (reader.Read())
+            {
+                string equipamento = reader["equipamento"].ToString();
+                int qtdReprovado = Convert.ToInt32(reader["reprovado"]);
+                string tipo = equipamento.Substring(0, 1).ToUpper();
+
+                totalReprovados += qtdReprovado;
+
+                if (defeitosDeMotor.Any(d => equipamento.ToLower().Contains(d)))
+                    totalMotores += qtdReprovado;
+                else if (defeitosDeRedutor.Any(d => equipamento.ToLower().Contains(d)))
+                    totalRedutores += qtdReprovado;
+
+                if (contagemPorTipoRedutor.ContainsKey(tipo))
+                    contagemPorTipoRedutor[tipo] += qtdReprovado;
+                else
+                    contagemPorTipoRedutor[tipo] = qtdReprovado;
+            }
+
+            // Atualiza os textos
+            TotalRetrabalhadosTexto = $"Total: {totalReprovados}";
+            QuantidadeMotoresTexto = $"Motor: {totalMotores}";
+            QuantidadeRedutoresTexto = $"Redutor: {totalRedutores}";
+
+            OnPropertyChanged(nameof(TotalRetrabalhadosTexto));
+            OnPropertyChanged(nameof(QuantidadeMotoresTexto));
+            OnPropertyChanged(nameof(QuantidadeRedutoresTexto));
+
+            // Atualiza o gráfico de pizza
+            RedutoresPieSeries = contagemPorTipoRedutor.Select(kv =>
+                new PieSeries<int>
+                {
+                    Name = kv.Key,
+                    Values = new[] { kv.Value },
+                    DataLabelsPaint = new SolidColorPaint(SKColors.White),
+                    DataLabelsPosition = PolarLabelsPosition.Middle,
+                    DataLabelsFormatter = point => $"{point.Context.Series.Name}: {point.PrimaryValue}"
+                }).ToArray();
+
+            QuantidadePorTipoRedutor.Clear();
+            foreach (var kv in contagemPorTipoRedutor.OrderBy(k => k.Key))
+                QuantidadePorTipoRedutor.Add($"Tipo {kv.Key}: {kv.Value} unidades");
+
+            OnPropertyChanged(nameof(RedutoresPieSeries));
+            OnPropertyChanged(nameof(QuantidadePorTipoRedutor));
+        }
+
+
+
+
         private string? _mesSelecionado;
         public string? MesSelecionado
         {
@@ -288,6 +376,7 @@ namespace EquipamentosRetrabalho.ViewModel
                 OnPropertyChanged();
                 int mes = ObterNumeroMes(value ?? "Todos");
                 CalcularMediaPorTipo(mes);
+
             }
         }
 

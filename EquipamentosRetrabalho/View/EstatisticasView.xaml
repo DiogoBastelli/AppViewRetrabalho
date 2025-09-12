@@ -34,6 +34,26 @@
                 Width="400"
                 HorizontalAlignment="Left" 
              />
+            <ComboBox Width="150"
+          SelectedValue="{Binding MesSelecionadoTipoRedutor, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+          SelectedValuePath="Content"
+          SelectedIndex="-1">
+                <ComboBoxItem>Todos</ComboBoxItem>
+                <ComboBoxItem>Janeiro</ComboBoxItem>
+                <ComboBoxItem>Fevereiro</ComboBoxItem>
+                <ComboBoxItem>Março</ComboBoxItem>
+                <ComboBoxItem>Abril</ComboBoxItem>
+                <ComboBoxItem>Maio</ComboBoxItem>
+                <ComboBoxItem>Junho</ComboBoxItem>
+                <ComboBoxItem>Julho</ComboBoxItem>
+                <ComboBoxItem>Agosto</ComboBoxItem>
+                <ComboBoxItem>Setembro</ComboBoxItem>
+                <ComboBoxItem>Outubro</ComboBoxItem>
+                <ComboBoxItem>Novembro</ComboBoxItem>
+                <ComboBoxItem>Dezembro</ComboBoxItem>
+            </ComboBox>
+
+           
 
             <DataGrid ItemsSource="{Binding DefeitosOrdenados}" AutoGenerateColumns="False" HeadersVisibility="Column"
           CanUserAddRows="False" CanUserDeleteRows="False" IsReadOnly="True" 
@@ -44,16 +64,6 @@
                     <DataGridTextColumn Header="Porcentagem" Binding="{Binding PercentualFormatado}" Width="84"/>
                 </DataGrid.Columns>
             </DataGrid>
-
-            <TextBlock Text="{Binding MediaTempo}" 
-           FontSize="16" 
-           FontWeight="Bold" 
-           Margin="10"/>
-
-            <TextBlock Text="{Binding MediaPorTipoTexto}" 
-            FontSize="16" 
-            FontWeight="Bold" 
-            Margin="10"/>
 
             <TextBlock Text="Gráfico de tempo medio de finalização:" FontWeight="Bold" Margin="0,20,0,0"/>
             <lvc:PieChart 
