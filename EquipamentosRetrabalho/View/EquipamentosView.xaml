@@ -1,8 +1,9 @@
 ﻿<UserControl x:Class="EquipamentosRetrabalho.View.EquipamentosView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:vm="clr-namespace:EquipamentosRetrabalho.ViewModel">
-
+             xmlns:vm="clr-namespace:EquipamentosRetrabalho.ViewModel"
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
+>
     <UserControl.DataContext>
         <vm:EquipamentosViewModel />
     </UserControl.DataContext>
@@ -13,18 +14,31 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <!-- Filtros de pesquisa -->
         <StackPanel Orientation="Horizontal" Margin="10" Grid.Row="0">
             <TextBlock Text="Pesquisar por:" VerticalAlignment="Center" Margin="0,0,10,0"/>
             <ComboBox Width="150"
-                      ItemsSource="{Binding FiltrosDisponiveis}"
-                      SelectedItem="{Binding FiltroSelecionado}"
+                      ItemsSource="{Binding CamposDisponiveis}"
+                      SelectedItem="{Binding CampoPesquisaSelecionado}"
                       Margin="0,0,10,0"/>
             <TextBox Width="200"
-                     Text="{Binding FiltroPesquisa, UpdateSourceTrigger=PropertyChanged}" />
+                     Text="{Binding TextoPesquisa, UpdateSourceTrigger=PropertyChanged}" />
+            
+            <TextBlock Text="Filtrar por:" VerticalAlignment="Center" Margin="10,0,10,0"/>
+            <ComboBox Width="200"
+          ItemsSource="{Binding OpcoesFiltro}"
+          IsEditable="False"
+          StaysOpenOnEdit="True">
+                <ComboBox.ItemTemplate>
+                    
+                    <DataTemplate>
+                        <CheckBox Content="{Binding Nome}"
+                      IsChecked="{Binding Selecionado, Mode=TwoWay}" />
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+
         </StackPanel>
 
-        <!-- DataGrid sem ScrollViewer externo -->
         <DataGrid Grid.Row="1"
                   ItemsSource="{Binding Equipamentos}" 
                   AutoGenerateColumns="False"
