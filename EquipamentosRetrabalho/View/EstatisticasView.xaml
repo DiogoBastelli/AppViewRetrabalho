@@ -8,7 +8,7 @@
              mc:Ignorable="d">
 
     <ScrollViewer>
-        <StackPanel Margin="20" Orientation="Vertical" >
+        <StackPanel Margin="20" Orientation="Vertical">
 
             <Grid Margin="0,0,0,20">
                 <Grid.ColumnDefinitions>
@@ -16,34 +16,28 @@
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
 
-                <StackPanel Grid.Column="0">
-                    <TextBlock Text="Total de Equipamentos por Mês " 
-                        FontWeight="Bold" Margin="0,35,0,30" 
-                        HorizontalAlignment="Center"
-                        FontSize="18"/>
-                    <lvc:CartesianChart 
-                    Series="{Binding SeriesTotalPorMes}"
-                    XAxes="{Binding XAxes}"
-                    YAxes="{Binding YAxes}"
-                    LegendPosition="Top"
-                    Height="300"
-                    Width="500"
-                    HorizontalAlignment="Center"/>
+                <StackPanel Grid.Column="0" Orientation="Vertical" HorizontalAlignment="Left" Margin="100,60,10,0">
+                    <TextBlock Text="Gráfico de Motores e Redutores:" FontWeight="Bold" Margin="0,0,0,5" HorizontalAlignment="Center" FontSize="18"/>
+                    <lvc:CartesianChart
+                        Series="{Binding Series}"
+                        XAxes="{Binding XAxes}"
+                        YAxes="{Binding YAxes}"
+                        DrawMargin="{Binding DrawMargin}"
+                        DrawMarginFrame="{x:Null}"
+                        Height="300"
+                        Width="600"/>
                 </StackPanel>
 
-                <StackPanel Grid.Column="1">
-                    <TextBlock Text="Gráfico de Motores e Redutores" 
-                        FontWeight="Bold" Margin="0,35,0,30" 
-                        HorizontalAlignment="Center"
-                        FontSize="18"/>
+                <StackPanel Grid.Column="1" Orientation="Vertical" HorizontalAlignment="Right" Margin="10,60,100,70">
+                    <TextBlock Text="Total de Equipamentos por Mês:" FontWeight="Bold" Margin="0,0,0,5" HorizontalAlignment="Center" FontSize="18"/>
                     <lvc:CartesianChart
-                    Series="{Binding Series}"
-                    XAxes="{Binding XAxes}"
-                    YAxes="{Binding YAxes}"
-                    Height="300"
-                    Width="500"
-                    HorizontalAlignment="Center"
-                        Margin="0,0,0,70"/>
+                        Series="{Binding SeriesTotalPorMes}"
+                        XAxes="{Binding XAxes}"
+                        YAxes="{Binding YAxes}"
+                        DrawMargin="{Binding DrawMargin}"
+                        DrawMarginFrame="{x:Null}"
+                        Height="300"
+                        Width="600"/>
                 </StackPanel>
             </Grid>
 
@@ -53,21 +47,17 @@
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
 
-                <StackPanel Grid.Column="0">
-                    <TextBlock Text="Gráfico de Redutores por Tipo (Pizza)" 
-                        FontWeight="Bold" Margin="0,0,0,30"
-                        HorizontalAlignment="Center"
-                        FontSize="18"/>
+                <StackPanel Grid.Column="0" Orientation="Vertical" HorizontalAlignment="Left" Margin="100,0,10,0">
+                    <TextBlock Text="Gráfico de Redutores por Tipo (Pizza):" FontWeight="Bold" Margin="0,0,0,5" HorizontalAlignment="Center" FontSize="18"/>
                     <lvc:PieChart 
-                    Series="{Binding RedutoresPieSeries}" 
-                    LegendPosition="Right" 
-                    Height="300"
-                    Width="400"
-                    HorizontalAlignment="Center"/>
-                    <ComboBox Width="150" Margin="0,10,0,0"
-                          SelectedValue="{Binding MesSelecionadoTipoRedutor, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                          SelectedValuePath="Content"
-                          SelectedIndex="-1">
+                        Series="{Binding RedutoresPieSeries}" 
+                        LegendPosition="Right" 
+                        Height="300"
+                        Width="400"/>
+                    <ComboBox Width="150"
+                              SelectedValue="{Binding MesSelecionadoTipoRedutor, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                              SelectedValuePath="Content"
+                              SelectedIndex="-1">
                         <ComboBoxItem>Todos</ComboBoxItem>
                         <ComboBoxItem>Janeiro</ComboBoxItem>
                         <ComboBoxItem>Fevereiro</ComboBoxItem>
@@ -84,19 +74,15 @@
                     </ComboBox>
                 </StackPanel>
 
-                <StackPanel Grid.Column="1">
-                    <TextBlock Text="Gráfico de Tempo Médio de Finalização" 
-                        FontWeight="Bold" Margin="0,0,0,30"
-                        HorizontalAlignment="Center"
-                        FontSize="18"/>
+                <StackPanel Grid.Column="1" Orientation="Vertical" HorizontalAlignment="Right" Margin="10,0,100,70">
+                    <TextBlock Text="Gráfico de tempo médio de finalização:" FontWeight="Bold" Margin="0,0,0,5" HorizontalAlignment="Center" FontSize="18"/>
                     <lvc:PieChart 
-                    Series="{Binding TempoMedioFinalização}" 
-                    LegendPosition="Right" 
-                    Height="300"
-                    Width="400"
-                    HorizontalAlignment="Center"/>
-                    <ComboBox Width="150" Margin="0,10,0,0"
-                          SelectedItem="{Binding MesSelecionado, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                        Series="{Binding TempoMedioFinalização }" 
+                        LegendPosition="Right" 
+                        Height="300"
+                        Width="400"/>
+                    <ComboBox Width="150"
+                              SelectedItem="{Binding MesSelecionado, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                         <ComboBoxItem IsSelected="True" IsEnabled="False">Selecione um mês</ComboBoxItem>
                         <ComboBoxItem>Todos</ComboBoxItem>
                         <ComboBoxItem>Janeiro</ComboBoxItem>
@@ -115,19 +101,16 @@
                 </StackPanel>
             </Grid>
 
-            <TextBlock Text="Ranking de Defeitos" FontWeight="Bold" Margin="0,40,0,20" HorizontalAlignment="Center" FontSize="18"/>
             <DataGrid ItemsSource="{Binding DefeitosOrdenados}" AutoGenerateColumns="False" HeadersVisibility="Column"
-                  CanUserAddRows="False" CanUserDeleteRows="False" IsReadOnly="True" 
-                  Margin="10" FontSize="14" RowHeaderWidth="0" Width="500" 
-                  HorizontalAlignment="Center">
-                <DataGrid.Columns >
+                      CanUserAddRows="False" CanUserDeleteRows="False" IsReadOnly="True" 
+                      Margin="10" FontSize="14" RowHeaderWidth="0" Width="406" HorizontalAlignment="Center">
+                <DataGrid.Columns>
                     <DataGridTextColumn Header="Rank" Binding="{Binding PosicaoFormatada}" Width="50"/>
-                    <DataGridTextColumn Header="Defeito" Binding="{Binding Nome}" Width="*" />
-                    <DataGridTextColumn Header="Porcentagem" Binding="{Binding PercentualFormatado}" Width="100"/>
+                    <DataGridTextColumn Header="Defeito" Binding="{Binding Nome}" Width="*"/>
+                    <DataGridTextColumn Header="Porcentagem" Binding="{Binding PercentualFormatado}" Width="84"/>
                 </DataGrid.Columns>
             </DataGrid>
 
         </StackPanel>
     </ScrollViewer>
-
 </UserControl>

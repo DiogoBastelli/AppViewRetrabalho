@@ -3,12 +3,12 @@
   "WorkspaceRootPath": "C:\\Users\\diogo\\source\\repos\\EquipamentosRetrabalho\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{7144CF3B-7645-44C6-A627-7313B22F27A2}|EquipamentosRetrabalho\\EquipamentosRetrabalho.csproj|c:\\users\\diogo\\source\\repos\\equipamentosretrabalho\\equipamentosretrabalho\\viewmodel\\estatisticasviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{7144CF3B-7645-44C6-A627-7313B22F27A2}|EquipamentosRetrabalho\\EquipamentosRetrabalho.csproj|solutionrelative:equipamentosretrabalho\\viewmodel\\estatisticasviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{7144CF3B-7645-44C6-A627-7313B22F27A2}|EquipamentosRetrabalho\\EquipamentosRetrabalho.csproj|c:\\users\\diogo\\source\\repos\\equipamentosretrabalho\\equipamentosretrabalho\\view\\estatisticasview.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
       "RelativeMoniker": "D:0:0:{7144CF3B-7645-44C6-A627-7313B22F27A2}|EquipamentosRetrabalho\\EquipamentosRetrabalho.csproj|solutionrelative:equipamentosretrabalho\\view\\estatisticasview.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7144CF3B-7645-44C6-A627-7313B22F27A2}|EquipamentosRetrabalho\\EquipamentosRetrabalho.csproj|c:\\users\\diogo\\source\\repos\\equipamentosretrabalho\\equipamentosretrabalho\\viewmodel\\estatisticasviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7144CF3B-7645-44C6-A627-7313B22F27A2}|EquipamentosRetrabalho\\EquipamentosRetrabalho.csproj|solutionrelative:equipamentosretrabalho\\viewmodel\\estatisticasviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{7144CF3B-7645-44C6-A627-7313B22F27A2}|EquipamentosRetrabalho\\EquipamentosRetrabalho.csproj|c:\\users\\diogo\\source\\repos\\equipamentosretrabalho\\equipamentosretrabalho\\view\\equipamentosview.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
@@ -50,7 +50,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 4,
+          "SelectedChildIndex": 5,
           "Children": [
             {
               "$type": "Bookmark",
@@ -81,25 +81,24 @@
               "RelativeToolTip": "EquipamentosRetrabalho\\ViewModel\\EquipamentosViewModel.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAFUAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-15T23:30:59.531Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-08-15T23:30:59.531Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 1,
               "Title": "EstatisticasViewModel.cs",
               "DocumentMoniker": "C:\\Users\\diogo\\source\\repos\\EquipamentosRetrabalho\\EquipamentosRetrabalho\\ViewModel\\EstatisticasViewModel.cs",
               "RelativeDocumentMoniker": "EquipamentosRetrabalho\\ViewModel\\EstatisticasViewModel.cs",
               "ToolTip": "C:\\Users\\diogo\\source\\repos\\EquipamentosRetrabalho\\EquipamentosRetrabalho\\ViewModel\\EstatisticasViewModel.cs",
               "RelativeToolTip": "EquipamentosRetrabalho\\ViewModel\\EstatisticasViewModel.cs",
-              "ViewState": "AgIAAMsAAAAAAAAAAAAUwOUAAAANAAAAAAAAAA==",
+              "ViewState": "AgIAAM8AAAAAAAAAAAAuwOcAAAAfAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-08-15T22:53:47.236Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 0,
               "Title": "EstatisticasView.xaml",
               "DocumentMoniker": "C:\\Users\\diogo\\source\\repos\\EquipamentosRetrabalho\\EquipamentosRetrabalho\\View\\EstatisticasView.xaml",
               "RelativeDocumentMoniker": "EquipamentosRetrabalho\\View\\EstatisticasView.xaml",
@@ -119,8 +118,7 @@
               "RelativeToolTip": "EquipamentosRetrabalho\\View\\EstatisticasView.xaml.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAbAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-22T20:42:01.88Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-08-22T20:42:01.88Z"
             },
             {
               "$type": "Document",
@@ -144,8 +142,7 @@
               "RelativeToolTip": "EquipamentosRetrabalho\\Model\\EquipamentosModel.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABkAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-22T20:39:41.789Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-08-22T20:39:41.789Z"
             },
             {
               "$type": "Document",
@@ -156,8 +153,7 @@
               "ToolTip": "C:\\Users\\diogo\\source\\repos\\EquipamentosRetrabalho\\EquipamentosRetrabalho\\View\\EquipamentosView.xaml",
               "RelativeToolTip": "EquipamentosRetrabalho\\View\\EquipamentosView.xaml",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2025-08-15T23:09:09.248Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-08-15T23:09:09.248Z"
             },
             {
               "$type": "Document",
@@ -169,8 +165,7 @@
               "RelativeToolTip": "EquipamentosRetrabalho\\ViewModel\\OpcaoFiltro.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-19T21:37:03.862Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-09-19T21:37:03.862Z"
             },
             {
               "$type": "Document",
