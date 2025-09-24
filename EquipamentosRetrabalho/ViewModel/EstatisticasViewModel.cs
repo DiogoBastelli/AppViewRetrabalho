@@ -22,11 +22,16 @@ namespace EquipamentosRetrabalho.ViewModel
 
         public IEnumerable<ISeries> TempoMedioFinalização { get; set; } = Array.Empty<ISeries>();
 
+        public ISeries[] SeriesTotalPorMes { get; set; } = Array.Empty<ISeries>();
+
         public LiveChartsCore.Drawing.Padding DrawMargin { get; set; } = new(0, 0, 0, 0);
 
         public string QuantidadeRedutoresTexto { get; set; } = "";
         public string QuantidadeMotoresTexto { get; set; } = "";
         public string TotalRetrabalhadosTexto { get; set; } = "";
+
+
+
 
         private string _quantidadePorDefeitoTexto = "";
         public string QuantidadePorDefeitoTexto
@@ -162,8 +167,6 @@ namespace EquipamentosRetrabalho.ViewModel
             }
 
             TotalRetrabalhadosTexto = $"Total: {totalReprovados}";
-            QuantidadeMotoresTexto = $"Motor: {totalMotores}";
-            QuantidadeRedutoresTexto = $"Redutor: {totalRedutores}";
 
             DefeitosOrdenados.Clear();
 
@@ -212,6 +215,30 @@ namespace EquipamentosRetrabalho.ViewModel
                     DataLabelsPosition = PolarLabelsPosition.Middle,
                     DataLabelsFormatter = point => $"{point.Context.Series.Name}: {point.PrimaryValue}"
                 }).ToArray();
+
+            int n = motoresValores.Length;
+
+            int[] combinedValores = new int[n];
+            for (int i = 0; i < n; i++)
+            {
+                combinedValores[i] = motoresValores[i] + redutoresValores[i];
+            }
+
+            SeriesTotalPorMes = new ISeries[]
+            {
+            new ColumnSeries<int>
+            {
+                Values = combinedValores,
+                Name = "Total",
+                Fill = new SolidColorPaint(SKColors.Red),
+                DataLabelsPaint = new SolidColorPaint(SKColors.White),
+                DataLabelsFormatter = point => point.PrimaryValue.ToString(),
+                MaxBarWidth = 35
+            }
+            };
+
+            OnPropertyChanged(nameof(SeriesTotalPorMes));
+
 
             OnPropertyChanged(nameof(TotalRetrabalhadosTexto));
             OnPropertyChanged(nameof(QuantidadeMotoresTexto));
@@ -291,7 +318,6 @@ namespace EquipamentosRetrabalho.ViewModel
             }
         }
 
-
         public void CalcularRedutoresPorTipo(int mes = 0)
         {
             using var conn = new MySqlConnection(_connectionString);
@@ -335,16 +361,12 @@ namespace EquipamentosRetrabalho.ViewModel
                     contagemPorTipoRedutor[tipo] = qtdReprovado;
             }
 
-            // Atualiza os textos
             TotalRetrabalhadosTexto = $"Total: {totalReprovados}";
-            QuantidadeMotoresTexto = $"Motor: {totalMotores}";
-            QuantidadeRedutoresTexto = $"Redutor: {totalRedutores}";
-
+            
             OnPropertyChanged(nameof(TotalRetrabalhadosTexto));
             OnPropertyChanged(nameof(QuantidadeMotoresTexto));
             OnPropertyChanged(nameof(QuantidadeRedutoresTexto));
 
-            // Atualiza o gráfico de pizza
             RedutoresPieSeries = contagemPorTipoRedutor.Select(kv =>
                 new PieSeries<int>
                 {
