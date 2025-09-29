@@ -17,7 +17,7 @@
                 </Grid.ColumnDefinitions>
 
                 <StackPanel Grid.Column="0" Orientation="Vertical" HorizontalAlignment="Left" Margin="100,60,10,0">
-                    <TextBlock Text="Gráfico de Motores e Redutores:" FontWeight="Bold" Margin="0,0,0,40" HorizontalAlignment="Center" FontSize="18"/>
+                    <TextBlock Text="Quantidade de Motores e Redutores:" FontWeight="Bold" Margin="0,0,0,40" HorizontalAlignment="Center" FontSize="18"/>
                     <lvc:CartesianChart
                         Series="{Binding Series}"
                         XAxes="{Binding XAxes}"
@@ -29,7 +29,7 @@
                 </StackPanel>
 
                 <StackPanel Grid.Column="1" Orientation="Vertical" HorizontalAlignment="Right" Margin="10,60,100,70">
-                    <TextBlock Text="Total de Equipamentos por Mês:" FontWeight="Bold" Margin="0,0,0,40" HorizontalAlignment="Center" FontSize="18"/>
+                    <TextBlock Text="Total de Equipamentos:" FontWeight="Bold" Margin="0,0,0,40" HorizontalAlignment="Center" FontSize="18"/>
                     <lvc:CartesianChart
                         Series="{Binding SeriesTotalPorMes}"
                         XAxes="{Binding XAxes}"
@@ -48,7 +48,7 @@
                 </Grid.ColumnDefinitions>
 
                 <StackPanel Grid.Column="0" Orientation="Vertical" HorizontalAlignment="Left" Margin="170,0,10,0">
-                    <TextBlock Text="Gráfico de Redutores por Tipo (Pizza):" FontWeight="Bold" Margin="0,0,0,40" HorizontalAlignment="Center" FontSize="18"/>
+                    <TextBlock Text="Quantidade de cada tipo de redutor:" FontWeight="Bold" Margin="0,0,0,40" HorizontalAlignment="Center" FontSize="18"/>
                     <lvc:PieChart 
                         Series="{Binding RedutoresPieSeries}" 
                         LegendPosition="Right" 
@@ -75,14 +75,15 @@
                 </StackPanel>
 
                 <StackPanel Grid.Column="1" Orientation="Vertical" HorizontalAlignment="Right" Margin="10,0,170,70">
-                    <TextBlock Text="Gráfico de tempo médio de finalização:" FontWeight="Bold" Margin="0,0,0,40" HorizontalAlignment="Center" FontSize="18"/>
+                    <TextBlock Text="Tempo médio de finalização por tipo de redutor:" FontWeight="Bold" Margin="0,0,0,40" HorizontalAlignment="Center" FontSize="18"/>
                     <lvc:PieChart 
                         Series="{Binding TempoMedioFinalização }" 
                         LegendPosition="Right" 
                         Height="300"
                         Width="400"/>
                     <ComboBox Width="150"
-                              SelectedItem="{Binding MesSelecionado, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+          SelectedValue="{Binding MesSelecionado, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+          SelectedValuePath="Content">
                         <ComboBoxItem IsSelected="True" IsEnabled="False">Selecione um mês</ComboBoxItem>
                         <ComboBoxItem>Todos</ComboBoxItem>
                         <ComboBoxItem>Janeiro</ComboBoxItem>
@@ -98,6 +99,7 @@
                         <ComboBoxItem>Novembro</ComboBoxItem>
                         <ComboBoxItem>Dezembro</ComboBoxItem>
                     </ComboBox>
+
                 </StackPanel>
             </Grid>
 

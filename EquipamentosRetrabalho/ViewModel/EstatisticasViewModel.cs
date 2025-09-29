@@ -199,8 +199,8 @@ namespace EquipamentosRetrabalho.ViewModel
 
             Series = new ISeries[]
             {
-            new LiveChartsCore.SkiaSharpView.ColumnSeries<int> { Values = motoresValores, Name = "Motores" },
-            new LiveChartsCore.SkiaSharpView.ColumnSeries<int> { Values = redutoresValores, Name = "Redutores" }
+                new LiveChartsCore.SkiaSharpView.ColumnSeries<int> { Values = motoresValores, Name = "Motores" },
+                new LiveChartsCore.SkiaSharpView.ColumnSeries<int> { Values = redutoresValores, Name = "Redutores" }
             };
 
             XAxes = new Axis[] { new Axis { Labels = labels, SeparatorsPaint = new SolidColorPaint(SKColors.LightGray) } };
@@ -233,9 +233,10 @@ namespace EquipamentosRetrabalho.ViewModel
                 Fill = new SolidColorPaint(SKColors.Red),
                 DataLabelsPaint = new SolidColorPaint(SKColors.White),
                 DataLabelsFormatter = point => point.PrimaryValue.ToString(),
-                MaxBarWidth = 35
+                MaxBarWidth = 35,
             }
             };
+
 
             OnPropertyChanged(nameof(SeriesTotalPorMes));
 
@@ -294,17 +295,6 @@ namespace EquipamentosRetrabalho.ViewModel
             }
         }
 
-        private string _mediaPorTipoTexto;
-        public string MediaPorTipoTexto
-        {
-            get => _mediaPorTipoTexto;
-            set
-            {
-                _mediaPorTipoTexto = value;
-                OnPropertyChanged();
-            }
-        }
-
         private string? _mesSelecionadoTipoRedutor;
         public string? MesSelecionadoTipoRedutor
         {
@@ -324,9 +314,9 @@ namespace EquipamentosRetrabalho.ViewModel
             conn.Open();
 
             string query = @"
-        SELECT equipamento, IFNULL(reprovado, 0) AS reprovado
-        FROM controle_lotes
-        WHERE status='Aguardando Retrabalho'";
+            SELECT equipamento, IFNULL(reprovado, 0) AS reprovado
+            FROM controle_lotes
+            WHERE status='Aguardando Retrabalho'";
 
             if (mes > 0)
                 query += " AND MONTH(data) = @mes";
@@ -384,8 +374,6 @@ namespace EquipamentosRetrabalho.ViewModel
             OnPropertyChanged(nameof(RedutoresPieSeries));
             OnPropertyChanged(nameof(QuantidadePorTipoRedutor));
         }
-
-
 
 
         private string? _mesSelecionado;
@@ -491,10 +479,8 @@ namespace EquipamentosRetrabalho.ViewModel
                     });
                 }
 
-                MediaPorTipoTexto = sb.ToString();
                 TempoMedioFinalização = series;
 
-                OnPropertyChanged(nameof(MediaPorTipoTexto));
                 OnPropertyChanged(nameof(TempoMedioFinalização));
             }
             catch (Exception ex)
